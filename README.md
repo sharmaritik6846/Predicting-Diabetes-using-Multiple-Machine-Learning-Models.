@@ -60,39 +60,64 @@ plt.show()
 
     
 fig, ax = plt.subplots(4,2, figsize=(16,16))
+
 sns.distplot(data1['Age'], bins = 20, ax=ax[0,0]) 
-sns.distplot(data1['Pregnancies'], bins = 20, ax=ax[0,1]) 
+
+sns.distplot(data1['Pregnancies'], bins = 20, ax=ax[0,1])
+
 sns.distplot(data1['Glucose'], bins = 20, ax=ax[1,0]) 
+
 sns.distplot(data1['BloodPressure'], bins = 20, ax=ax[1,1]) 
+
 sns.distplot(data1['SkinThickness'], bins = 20, ax=ax[2,0])
+
 sns.distplot(data1['Insulin'], bins = 20, ax=ax[2,1])
+
 sns.distplot(data1['DiabetesPedigreeFunction'], bins = 20, ax=ax[3,0]) 
+
 sns.distplot(data1['BMI'], bins = 20, ax=ax[3,1])
+
 plt.tight_layout()
+
 plt.show()
 
+
 sns.pairplot(data = data1, hue = 'Outcome')
+
 plt.show()
 
 data1.hist(bins=50, figsize=(20,15))
+
 plt.show()
 
 fig, ax = plt.subplots(figsize = (12,10))
+
 ax= sns.heatmap(data1.corr(), cmap = 'RdBu_r', cbar=True, annot=True, linewidths=0.5, ax=ax)
+
 plt.show()
 
-data2=pd.DataFrame(index=['Pregnancies','Glucose','BloodPressure','SkinThickness','Insulin','BMI','DiabetesPedigreeFunction','Age','Outcome'],columns=["count","mean","std","min","25%","50%","75%","max"], data=Description)
+data2=pd.DataFrame(index=['Pregnancies','Glucose','BloodPressure','SkinThickness','Insulin','BMI','DiabetesPedigreeFunction','Age','Outcome'],columns=["count","mean","std","min","25%","50%","75%","max"], 
+
+data=Description)
 
 f, ax = plt.subplots(figsize=(10,10))  
+
 sns.heatmap(data2, annot=True, cmap="Blues", fmt='.0f', ax=ax, linewidths=2, cbar=False, annot_kws={"size":14}) 
+
 plt.xticks(size=16) 
+
 plt.yticks(size=10, rotation=45) 
+
 plt.ylabel("Variables")
+
 plt.title("Descriptive Statistics", size=14) 
+
 plt.show()
 
 data1.corr()
+
 data1.corr()['Outcome'].sort_values(ascending=False)
+
 data1['Outcome'].value_counts()
 
 The outcomes of these graphs can be summarized as follows:
@@ -116,21 +141,37 @@ data1.groupby('Outcome').mean()
 data1[['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI']] = data1[['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI']].replace(0, np.NaN)
 
 imputer = SimpleImputer(strategy='mean')
+
 data_filled = pd.DataFrame(imputer.fit_transform(data1))
+
 data_filled.columns = data1.columns
+
 data_filled.index = data1.index
+
 data_filled
+
 data_filled.columns
+
 data_filled.index
+
 X = data_filled.drop('Outcome', axis=1)
+
 y = data_filled['Outcome']
+
 X
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=1)
+
 sc = StandardScaler()
+
 X_train = sc.fit_transform(X_train)
+
 X_test = sc.transform(X_test)
+
 print(X_train)
+
 print(X.shape, X_train.shape, X_test.shape)
+
 model = svm.SVC()
 param_grid = {
     'C': [0.1, 1, 10, 100],
@@ -148,30 +189,37 @@ random_search.fit(X_train, y_train)
 
 # Make predictions on the test set using the best model
 y_pred = random_search.best_estimator_.predict(X_test)
+
 print('Accuracy:', accuracy_score(y_test, y_pred))
+
 print('Confusion Matrix:', confusion_matrix(y_test, y_pred))
+
 bagging = BaggingClassifier(random_search.best_estimator_, max_samples=1.0, max_features=1.0)
 bagging.fit(X_train, y_train)
 y_pred_bagging = bagging.predict(X_test)
+
 print('Bagging Accuracy:', accuracy_score(y_test, y_pred_bagging))
 print('Bagging Confusion Matrix:', confusion_matrix(y_test, y_pred_bagging))
+
 from sklearn.linear_model import LogisticRegression
 logreg = LogisticRegression(random_state = 42)
 logreg.fit(X_train, y_train)
-from sklearn.linear_model import LogisticRegression
 
+from sklearn.linear_model import LogisticRegression
 log_reg = LogisticRegression()
 log_reg.fit(X_train, y_train)
 
 y_pred_log_reg = log_reg.predict(X_test)
 
 print('Logistic Regression Accuracy:', accuracy_score(y_test, y_pred_log_reg))
-from sklearn.neighbors import KNeighborsClassifier
-knn = KNeighborsClassifier(n_neighbors = 24, metric = 'minkowski', p = 2)
-knn.fit(X_train, y_train)
-from sklearn import metrics
+
 from sklearn.neighbors import KNeighborsClassifier
 
+knn = KNeighborsClassifier(n_neighbors = 24, metric = 'minkowski', p = 2)
+knn.fit(X_train, y_train)
+
+from sklearn import metrics
+from sklearn.neighbors import KNeighborsClassifier
 X_axis = list(range(1, 31))
 acc = pd.Series()
 x = range(1,31)
